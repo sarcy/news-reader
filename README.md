@@ -3,7 +3,7 @@ A simple [news reader app](http://news-reader.sarcastyx.surge.sh) written in Rea
 
 This app was mostly written as a React learning exercise.
 
-### Pre requisites
+### Prerequisites
 You need to have the latest version of [Node.js](https://nodejs.org) installed. This should also install npm.
 
 ### To run this app locally.
