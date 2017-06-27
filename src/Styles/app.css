@@ -8,19 +8,17 @@ main {
 
 .article-metadata {
   display: flex;
-  align-items: center;
+  flex-flow: column nowrap;
   justify-content: space-between;
 }
 
-.metadata-wrapper {
-  max-width: 70%;
-}
-
 .read-more-wrapper {
+  margin-top: 1rem;
   text-align: right;
 }
 
 .button {
+  display: block;
   border-radius: 0.2rem;
 }
 

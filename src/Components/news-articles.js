@@ -14,7 +14,7 @@ function NewsArticles (props) {
         let publishedDate = Helper.convertPublishedDate(article.publishedAt);
 
         return (
-          <div className='large-6 medium-6 columns' key={ index }>
+          <div className='large-6 medium-6 small-12 columns' key={ index }>
             <div className='callout primary'>
               <h6>
                 <a href={ article.url } target='_blank' rel='noopener noreferrer'>
