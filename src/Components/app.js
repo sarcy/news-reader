@@ -19,7 +19,9 @@ class App extends Component {
       isLoading   : true,
       newsSource  : '',
       newsSources : [],
-      newsArticles: []
+      newsArticles: [],
+      newsTitle   : '',
+      localStorageAllowed : false
     }
 
     this.getNewsSources = this.getNewsSources.bind(this);
@@ -28,7 +30,46 @@ class App extends Component {
 
   handleNewsSourceChange (e) {
 
-    let newsArticles = Helpers.getNewsForSource(e.target.value);
+    let selectedNewsSource = e.target.value;
+    //let newsArticles = Helpers.getNewsForSource(selectedNewsSource);
+    let newsTitle = Helpers.getSourceName(this.state.newsSources, selectedNewsSource);
+
+    if (this.state.localStorageAllowed) {
+      let readNewsSource = {
+        key   : e.target.value,
+        name  : newsTitle
+      }
+      Helpers.setLastReadNewsSource(readNewsSource);
+    }
+
+    let newsSource = {
+      key   : selectedNewsSource,
+      name  : newsTitle
+    }
+
+    this.renderTheNews(newsSource);
+
+  }
+
+  /**
+   * Read the last news source from localStorage and then show the news.
+   */
+  showLastReadSource = () => {
+
+    let lastReadSource = Helpers.getLastReadNewsSource();
+    console.log('lastReadSource', lastReadSource);
+
+    if (lastReadSource === '' || lastReadSource === undefined || lastReadSource === null) {
+      return;
+    } else {
+
+      this.renderTheNews(lastReadSource);
+
+    }
+  }
+
+  renderTheNews = (newsSource) => {
+    let newsArticles = Helpers.getNewsForSource(newsSource.key);
 
     this.setState({
       isLoading : true
@@ -41,7 +82,8 @@ class App extends Component {
 
       this.setState({
         isLoading   : false,
-        newsArticles: articleColumns
+        newsArticles: articleColumns,
+        newsTitle   : newsSource.name
       });
     });
 
@@ -51,7 +93,7 @@ class App extends Component {
     let newsSources = Helpers.getNewsSources();
     newsSources.then(sources => {
 
-      let mappedSources = sources.map((source, index) => {
+      let mappedSources = sources.map((source) => {
         return {
           id    : source.id,
           name  : source.name
@@ -68,6 +110,12 @@ class App extends Component {
 
   componentWillMount () {
     this.getNewsSources();
+
+    if (Helpers.checkForLocalStorage()) {
+      this.setState({ localStorageAllowed : true });
+
+      this.showLastReadSource();
+    }
   }
 
   render() {
@@ -79,7 +127,7 @@ class App extends Component {
 
     return (
       <div className='large-12 columns'>
-          <Header />
+          <Header newsTitle={ this.state.newsTitle } />
 
           <main>
 

@@ -83,6 +83,43 @@ let Helpers = {
                   + pubDate.toTimeString();
 
     return convertedDate;
+  },
+
+  checkForLocalStorage : function () {
+    if (window.localStorage !== 'undefined') {
+      return true;
+    }
+
+    return false;
+  },
+
+  setLastReadNewsSource : function (newsSource) {
+    window.localStorage.setItem(Constants.STORAGE_NEWS_SOURCE, JSON.stringify(newsSource));
+  },
+
+  getLastReadNewsSource : function () {
+    let newsSource = window.localStorage.getItem(Constants.STORAGE_NEWS_SOURCE);
+
+    if (newsSource !== undefined && newsSource !== '') {
+      return JSON.parse(newsSource);
+    }
+
+    return '';
+  },
+
+  getSourceName : function (newsSources, sourceKey) {
+
+    if (newsSources === '' || newsSources === undefined || newsSources.length <= 0) {
+      return '';
+    } else {
+      let sourceName = newsSources.filter((source) => {
+        if (source.id === sourceKey) {
+          return source;
+        }
+      });
+
+      return sourceName[0].name;
+    }
   }
 
 }
